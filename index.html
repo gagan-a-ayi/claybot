@@ -299,21 +299,23 @@ function appendBotMsg({html, qr=[], sources=[], showNext=false, nextLabel='', is
   if (sources && sources.length) {
     inner += `<div class="source-chips">` + sources.map(s=>`<span class="source-chip"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 17.93V18a1 1 0 00-2 0v1.93A8.001 8.001 0 014.07 13H6a1 1 0 000-2H4.07A8.001 8.001 0 0111 4.07V6a1 1 0 002 0V4.07A8.001 8.001 0 0119.93 11H18a1 1 0 000 2h1.93A8.001 8.001 0 0113 19.93z"/></svg>${s}</span>`).join('') + `</div>`;
   }
-  // Always add End Chat button
-  inner += `
-    <div class="end-chat-wrap">
-      <button class="end-chat-btn" id="end-chat-btn">🛑 End Chat</button>
-    </div>
-  `;
-  row.innerHTML = inner;
-  msgContainer.appendChild(row); scrollBottom();
+  // Add End Chat unless this is a restart-only message
+  if (!qr.includes("🔄 Restart Chat")) {
+    inner += `
+      <div class="end-chat-wrap">
+        <button class="end-chat-btn">🛑 End Chat</button>
+      </div>
+    `;
+  }
+
+row.innerHTML = inner;
+msgContainer.appendChild(row); scrollBottom();
 
   row.querySelectorAll('.qr-chip').forEach(chip => {
     chip.addEventListener('click', () => sendMessage(chip.dataset.msg));
   });
   // End Chat click
-  const endBtn = row.querySelector('#end-chat-btn');
-  if (endBtn) {
+  if (endBtn) {const endBtn = row.querySelector('.end-chat-btn');
     endBtn.addEventListener('click', endConversation);
   }
   const nb = document.getElementById('next-level-btn');
@@ -373,6 +375,12 @@ function showTypingThen(cb, delay) {
 // ── Main respond logic ─────────────────────────────────────────────────
 async function respond(input) {
   const t = input.toLowerCase().trim();
+
+  // Restart Chat trigger
+  if (/restart chat|🔄 restart chat/i.test(t)) {
+    restartChat();
+    return;
+  }
 
   // Crisis override
   if (/suicid|hurt myself|self.harm|end my life|die|no reason to live|want to die/i.test(t)) {
@@ -512,25 +520,55 @@ window.addEventListener('load', () => {
 });
 </script>
 <script>
+  function restartChat() {
+  // Reset state
+  state = {
+    topic: null,
+    subtype: null,
+    levelIndex: 0,
+    awaitingSubtype: false,
+    awaitingTopic: false
+  };
+
+  // Clear messages
+  msgContainer.innerHTML = '';
+
+  // Enable input
+  userInput.disabled = false;
+  sendBtn.disabled = false;
+
+  // Reset input box height
+  userInput.value = '';
+  userInput.style.height = 'auto';
+
+  // Show welcome again
+  appendBotMsg({
+    html: `
+      <h2>Hey there! I'm ClayBot 🧠</h2>
+      <p>Your <strong>Mental Health Check-in Bot</strong>.</p>
+      <p>We’re starting fresh. How are you feeling right now?</p>
+    `,
+    qr:["I'm stressed","I'm anxious","I'm sad","I'm feeling great","I need coping tips","I can't sleep"]
+  });
+}
+</script>
+<script>
   function endConversation() {
-  // Disable input
   userInput.disabled = true;
   sendBtn.disabled = true;
 
-  // Remove all interactive buttons
+  // Remove interactive elements
   document.querySelectorAll('.qr-chip').forEach(el => el.remove());
   document.querySelectorAll('.next-level-btn').forEach(el => el.remove());
   document.querySelectorAll('.end-chat-wrap').forEach(el => el.remove());
 
-  // Final closure message
   showTypingThen(() => appendBotMsg({
     html: `
       <h2>🌿 Session Closed</h2>
-      <p>Thank you for taking time to check in with yourself today.</p>
-      <p>If you need support again, just refresh the page.</p>
-      <blockquote>Taking care of your mind is strength.</blockquote>
+      <p>You showed up for yourself today. That matters.</p>
+      <blockquote>Growth happens quietly. And you're growing.</blockquote>
     `,
-    qr: []
+    qr:["🔄 Restart Chat"]
   }));
 }
 </script>

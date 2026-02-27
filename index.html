@@ -116,6 +116,33 @@
   .send-btn svg { width:20px;height:20px;fill:#fff; }
 
   @media(max-width:500px){.stage{padding:0;align-items:flex-end}.card{max-width:100%;height:100vh;border-radius:24px 24px 0 0}}
+
+  .end-chat-wrap {
+    margin-top:8px;
+  }
+
+  .end-chat-btn {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(244,63,94,.15);
+    border:1px solid rgba(244,63,94,.4);
+    color:#fca5a5;
+    font-size:12px;
+    font-weight:600;
+    padding:7px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    transition:all .2s;
+  }
+
+  .end-chat-btn:hover {
+    background:rgba(244,63,94,.3);
+    border-color:#f43f5e;
+    color:#fff;
+    transform:translateY(-1px);
+    box-shadow:0 4px 12px rgba(244,63,94,.3);
+  }
 </style>
 </head>
 <body>
@@ -139,479 +166,8 @@
     </div>
   </div>
 </div>
-
+<script src="claybot-dataset.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════════════════
-// DATASET: Multi-level, situation-specific mental health responses
-// ═══════════════════════════════════════════════════════════════════
-
-const CONSULT_LEVEL = {
-  label: "consult", icon: "🏥",
-  title: "Time to Reach Out to a Professional",
-  text: `<p>You've worked through several layers — and that takes real strength. 💪</p><p>If these strategies haven't brought enough relief, <strong>speaking with a professional is the most powerful next step</strong>. It's not a sign of failure — it's the smartest, bravest thing you can do.</p><h3>🧭 Who to reach out to</h3><ul><li><strong>Therapist / Psychologist</strong> — for talk therapy, CBT, coping strategies</li><li><strong>Psychiatrist</strong> — if medication may help alongside therapy</li><li><strong>General Practitioner (GP/Doctor)</strong> — a great first step, can refer you</li><li><strong>Counsellor</strong> — for guided support through life challenges</li></ul><h3>🌐 Find help online</h3><ul><li><code>BetterHelp.com</code> — online therapy, matched to your needs</li><li><code>Talkspace.com</code> — text & video therapy</li><li><code>psychologytoday.com/find-a-therapist</code> — local therapist directory</li><li><strong>India:</strong> iCall <code>9152987821</code> | Vandrevala <code>1860-2662-345</code></li><li><strong>US:</strong> SAMHSA <code>1-800-662-4357</code></li><li><strong>UK:</strong> NHS <code>111</code> or Mind <code>0300 123 3393</code></li></ul><blockquote>Asking for help is one of the most courageous things a human can do. 🌷</blockquote>`,
-  sources: ["psychologytoday.com","betterhelp.com","who.int/mental-health"]
-};
-
-// Each topic has sub-types, each with 4 progressive levels + a consult flag
-const DATASET = {
-
-  // ─── STRESS ────────────────────────────────────────────────────────
-  stress: {
-    label: "stress",
-    subtypes: {
-      work: {
-        label: "Work / Academic Stress",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Pause & Reset",
-            text:`<p>Work stress often comes from <strong>doing too much at once</strong>. Let's start simple.</p><h3>⏸️ Immediate Pause Technique</h3><ul><li>Close all tabs except the one task you're on</li><li>Write down your top <strong>3 tasks only</strong> for today</li><li>Take a 5-min walk — even around your room</li></ul><blockquote>You can't pour from an empty cup. A short pause is productive, not lazy.</blockquote>`,
-            qr:["This helped a little","I need more help","Different approach please"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Structure & Boundaries",
-            text:`<p>Let's add structure to reduce the chaos.</p><h3>📅 Time Blocking Method</h3><ul><li>Divide your day into <strong>90-min deep work blocks</strong> with 15-min breaks</li><li>Set a firm <em>"shutdown ritual"</em> — close laptop at the same time daily</li><li>Use the <strong>2-minute rule</strong>: if a task takes under 2 min, do it now</li></ul><h3>🛑 Boundary Scripts</h3><ul><li><em>"I can take that on after I finish this by Thursday."</em></li><li><em>"Let me check my capacity and get back to you."</em></li></ul><blockquote>Boundaries aren't walls — they're the architecture of sustainable performance.</blockquote>`,
-            qr:["Tried this, need more","Something different","This is helping!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Cognitive Restructuring",
-            text:`<p>Work stress often hides deeper thought patterns. Let's examine them.</p><h3>🧠 Thought Record Exercise</h3><ul><li>Write the stressful thought: <em>"I'm going to fail this project"</em></li><li>Rate belief 0–100%: <em>80%</em></li><li>Find <strong>evidence for</strong> and <strong>evidence against</strong></li><li>Write a balanced thought: <em>"It's challenging, but I've delivered before"</em></li><li>Re-rate belief: often drops to 30–40%</li></ul><h3>🎯 Decatastrophising</h3><ul><li>Ask: <em>What's the actual worst case? How likely is it? Could I survive it?</em></li><li>Usually, the worst case is survivable — and far less likely than it feels</li></ul>`,
-            qr:["Still struggling","Need professional help","This worked well!"] },
-          { level:"pro", icon:"💎", title:"Pro: Nervous System Regulation",
-            text:`<p>At this level, stress has likely become <em>chronic</em>. Your nervous system needs direct intervention.</p><h3>⚡ Somatic (Body-Based) Techniques</h3><ul><li><strong>Cold water face immersion</strong> — activates the dive reflex, drops heart rate fast</li><li><strong>Progressive Muscle Relaxation (PMR)</strong> — tense each muscle group 5s, release</li><li><strong>Vagal nerve stimulation</strong> — hum, gargle water, or do slow exhale breathing</li></ul><h3>🌊 Lifestyle Restructure</h3><ul><li>Commit to <strong>7–9 hours sleep</strong> as non-negotiable</li><li>30 min moderate exercise, 5x/week — proven to lower cortisol</li><li>Reduce caffeine before noon, eliminate after 2pm</li></ul><blockquote>"The body keeps the score." — Bessel van der Kolk. Chronic stress lives in the body, not just the mind.</blockquote>`,
-            qr:["Nothing is working","I want to see a professional"] },
-        ]
-      },
-      relationship: {
-        label: "Relationship Stress",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Create Space",
-            text:`<p>Relationship stress is draining because it involves someone you care about. First — <strong>give yourself permission to feel</strong> what you're feeling.</p><h3>💨 Immediate Relief</h3><ul><li>Take a 30-min break from the situation — don't respond in anger</li><li>Write what you're feeling (not what they did) in a private note</li><li>Do one self-care act: warm tea, a shower, favourite music</li></ul><blockquote>You can't resolve an argument while your nervous system is in fight-or-flight.</blockquote>`,
-            qr:["I need communication tips","This helped a bit","Need more strategies"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Non-Violent Communication",
-            text:`<p>NVC (Non-Violent Communication) is one of the most effective tools for relationship conflict.</p><h3>💬 The NVC Formula</h3><ul><li><strong>Observation:</strong> <em>"When you cancelled our plans without warning..."</em></li><li><strong>Feeling:</strong> <em>"I felt hurt and unimportant."</em></li><li><strong>Need:</strong> <em>"I need to feel that my time matters to you."</em></li><li><strong>Request:</strong> <em>"Could you give me notice next time?"</em></li></ul><p>Avoid "you always" / "you never" — these trigger defensiveness, not connection.</p>`,
-            qr:["We keep fighting anyway","Need deeper help","This is useful!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Attachment & Patterns",
-            text:`<p>Repeated relationship stress often traces back to <strong>attachment styles</strong> formed in childhood.</p><h3>🔍 Identify Your Pattern</h3><ul><li><strong>Anxious:</strong> Fear of abandonment, needs reassurance, reads into silence</li><li><strong>Avoidant:</strong> Pulls away when things get emotional, values independence highly</li><li><strong>Disorganised:</strong> Wants closeness but fears it; inconsistent responses</li></ul><h3>🌱 Breaking the Cycle</h3><ul><li>Notice your automatic reactions and <em>pause before acting</em></li><li>Name your attachment need out loud to yourself first</li><li>Practice <strong>self-soothing</strong> before seeking external validation</li></ul><blockquote>Awareness of your pattern is already 50% of the healing.</blockquote>`,
-            qr:["The relationship is toxic","Want couples therapy info","Still need help"] },
-          { level:"pro", icon:"💎", title:"Pro: Evaluating the Relationship",
-            text:`<p>At this stage, it's worth asking: <strong>is this relationship healthy for you?</strong></p><h3>🔑 Healthy vs Unhealthy Checklist</h3><ul><li>Do you feel <em>safe, respected, and heard</em> most of the time?</li><li>Is conflict resolved or does it <em>repeat in cycles</em>?</li><li>Are your core needs met — or consistently dismissed?</li></ul><h3>⚖️ Options to Consider</h3><ul><li>Couples / relationship counselling together</li><li>Individual therapy to process your role and needs</li><li>A structured separation period with a clear goal</li></ul><p>If there is <strong>any abuse (emotional, physical, financial)</strong> — please reach out to a specialist immediately.</p>`,
-            qr:["I think I need professional help","There is abuse involved","I want to talk more"] },
-        ]
-      },
-      financial: {
-        label: "Financial Stress",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Separate Emotion from Action",
-            text:`<p>Financial stress can feel like <em>shame, panic, and helplessness</em> all at once. Let's first separate the feeling from the problem.</p><h3>🧘 Immediate Grounding</h3><ul><li>Acknowledge: <em>"This is stressful. It's okay to feel that."</em></li><li>Avoid checking accounts repeatedly — it amplifies anxiety</li><li>Set a single designated "money time" each day (e.g., 7pm, 15 mins)</li></ul><blockquote>Financial problems are practical problems — they have practical solutions. But panic makes them harder to solve.</blockquote>`,
-            qr:["I don't know where to start","I need budgeting help","Need more relief"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Clarity & Small Wins",
-            text:`<p>Clarity reduces anxiety. You need to <strong>see the actual picture</strong> — not the foggy feared one.</p><h3>📊 The Money Map</h3><ul><li>List <strong>all income</strong> this month (realistic)</li><li>List <strong>fixed essential expenses</strong> (rent, food, utilities)</li><li>Find the gap: surplus or deficit?</li><li>Identify one <strong>small cut</strong> you can make this week</li></ul><h3>🏆 Small Wins</h3><ul><li>Cancel one unused subscription today</li><li>Cook one meal instead of ordering</li><li>Celebrate these — they build momentum</li></ul>`,
-            qr:["I'm in debt","It's getting worse","This helped, thanks!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Debt & Recovery Plan",
-            text:`<p>If debt is involved, you need a structured plan rather than avoidance.</p><h3>🎯 Debt Snowball Method</h3><ul><li>List all debts, smallest to largest</li><li>Pay <strong>minimum on all</strong> except the smallest</li><li>Throw every extra rupee/dollar at the smallest</li><li>Once paid, roll that payment to the next — <em>it builds momentum</em></li></ul><h3>📞 Don't Face It Alone</h3><ul><li>Contact creditors — they often have hardship programs</li><li>Look into free debt counselling services in your country</li><li>Avoid payday loans — they trap more than they help</li></ul>`,
-            qr:["I need mental health help for this","I feel hopeless about money","Consult a financial advisor"] },
-          { level:"pro", icon:"💎", title:"Pro: Financial Anxiety as a Mental Health Issue",
-            text:`<p>Chronic financial stress rewires the brain — it literally impairs decision-making and working memory. This is not a character flaw.</p><h3>🧠 What's Happening</h3><ul><li>Scarcity mindset narrows thinking to immediate threats</li><li>Cortisol stays elevated, causing poor sleep and irritability</li><li>Shame creates avoidance — making problems worse</li></ul><h3>💡 Breaking the Cycle</h3><ul><li>Financial therapy combines money coaching + mental health support</li><li>Mindfulness-Based Stress Reduction (MBSR) is shown to help</li><li>Community support groups (Debtors Anonymous) reduce shame</li></ul><blockquote>You are not your bank balance. Your worth is not your net worth.</blockquote>`,
-            qr:["I need to see a counsellor","I feel depressed about this"] },
-        ]
-      },
-      general: {
-        label: "General Stress",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Name It to Tame It",
-            text:`<p>When stress feels vague and everywhere — the first step is <strong>naming what's actually stressing you</strong>.</p><h3>📝 Stress Inventory (2 mins)</h3><ul><li>Write down every worry currently in your head</li><li>Circle the ones you <em>can actually control</em></li><li>Cross out the ones you cannot</li><li>Pick <strong>one actionable item</strong> from the circled list</li></ul><blockquote>"You can't fix what you haven't named." Start there.</blockquote>`,
-            qr:["It's work stress","It's relationship stress","It's financial stress","Need more help"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Lifestyle Reset",
-            text:`<p>Chronic stress usually has lifestyle roots. Let's address the foundations.</p><h3>🏗️ The Four Pillars</h3><ul><li><strong>Sleep:</strong> Even one extra hour has measurable stress-reduction effects</li><li><strong>Movement:</strong> A 20-min walk cuts cortisol significantly</li><li><strong>Social:</strong> Spend 20+ mins with a non-stressful person today</li><li><strong>Nutrition:</strong> Reduce sugar + caffeine — both spike anxiety</li></ul>`,
-            qr:["I've tried these","Need something deeper","This is helpful!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Stress Inoculation",
-            text:`<p>Stress Inoculation Training (SIT) is a clinical technique used by military, athletes, and emergency responders.</p><h3>🎯 How It Works</h3><ul><li><strong>Conceptualise:</strong> Understand your stressor clearly (journal it in detail)</li><li><strong>Rehearse:</strong> Mentally walk through the stressful scenario and your coping response</li><li><strong>Apply:</strong> Gradually expose yourself to mild stress to build resilience</li></ul><p>Regular practice <em>literally changes your stress response threshold</em> over time.</p>`,
-            qr:["I want to talk to someone","Nothing is working"] },
-          { level:"pro", icon:"💎", title:"Pro: Burnout Recovery Protocol",
-            text:`<p>If stress has reached this level, you may be experiencing <strong>burnout</strong> — a clinically recognised state of chronic exhaustion.</p><h3>🔋 Burnout Signals</h3><ul><li>Emotional numbness or detachment</li><li>Inability to feel pleasure in things you loved</li><li>Persistent physical exhaustion despite sleep</li><li>Cynicism about life/work/relationships</li></ul><h3>🌱 Recovery Requires</h3><ul><li>Significant rest — weeks, not days</li><li>Removing or reducing the source of burnout</li><li>Professional support — this is beyond self-help at this stage</li></ul><blockquote>Burnout is your body's final warning. Please listen.</blockquote>`,
-            qr:["I need professional help now","Tell me about therapists"] },
-        ]
-      }
-    },
-    subQR: ["Work / Academic stress","Relationship stress","Financial stress","General / I'm not sure"]
-  },
-
-  // ─── ANXIETY ───────────────────────────────────────────────────────
-  anxiety: {
-    label: "anxiety",
-    subtypes: {
-      social: {
-        label: "Social Anxiety",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Grounding Before Social Situations",
-            text:`<p>Social anxiety is one of the most common — and most treatable — forms of anxiety. You're not alone.</p><h3>🌿 Pre-Event Grounding</h3><ul><li>Do <strong>box breathing</strong> (4-4-4-4) 5 minutes before the event</li><li>Prepare 2–3 open questions to ask others — removes spotlight from you</li><li>Set a small goal: <em>"I'll talk to at least one new person."</em></li></ul><blockquote>You don't have to be the most interesting person. You just have to be present.</blockquote>`,
-            qr:["I avoid social events","I fear judgment","Need more help"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Cognitive Defusion",
-            text:`<p>Social anxiety is driven by thoughts like <em>"They'll judge me"</em> or <em>"I'll embarrass myself."</em> Let's defuse them.</p><h3>🧠 Defusion Technique</h3><ul><li>Notice the thought: <em>"Everyone is judging me"</em></li><li>Reframe: <em>"I'm having the thought that everyone is judging me"</em></li><li>Add distance: <em>"My anxious mind is telling me a story about judgment"</em></li></ul><p>This creates a gap between you and the thought — you observe it rather than <em>being</em> it.</p>`,
-            qr:["Still very scared","I avoid everything","This helps a little"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Gradual Exposure Ladder",
-            text:`<p>Avoidance maintains anxiety. <strong>Gradual exposure</strong> — at your own pace — rewires the fear response.</p><h3>🪜 Build Your Exposure Ladder</h3><ul><li><strong>Step 1 (Easy):</strong> Make eye contact with a stranger</li><li><strong>Step 2:</strong> Say hi to a cashier or neighbour</li><li><strong>Step 3:</strong> Have a 2-min small talk conversation</li><li><strong>Step 4:</strong> Join one social event for 20 mins</li><li><strong>Step 5 (Hard):</strong> Attend without an exit plan</li></ul><p>Stay at each step until anxiety drops by at least 50%, then advance.</p>`,
-            qr:["I can't even do step 1","It's really debilitating","I want a therapist"] },
-          { level:"pro", icon:"💎", title:"Pro: CBT + Social Skills Training",
-            text:`<p>At this level, structured therapeutic intervention gives the best outcomes.</p><h3>🎯 Evidence-Based Approaches</h3><ul><li><strong>CBT</strong> (Cognitive Behavioural Therapy) — gold standard for social anxiety</li><li><strong>ACT</strong> (Acceptance & Commitment Therapy) — values-based approach</li><li><strong>Group Therapy</strong> — paradoxically, being in a group is highly effective treatment</li><li><strong>SSRI medication</strong> — sometimes used alongside therapy (psychiatrist)</li></ul><blockquote>Social anxiety disorder is one of the most treatable mental health conditions. Recovery is very possible.</blockquote>`,
-            qr:["Connect me with help","I want to learn more","I'm ready to try therapy"] },
-        ]
-      },
-      performance: {
-        label: "Performance Anxiety",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Reframe Arousal",
-            text:`<p>Before a presentation, exam, or performance — that racing heart is <strong>not necessarily bad</strong>.</p><h3>⚡ The Reframe</h3><ul><li>Instead of <em>"I'm anxious"</em> → say <em>"I'm excited"</em></li><li>Research shows this simple shift improves performance measurably</li><li>Your body's arousal response is <em>identical</em> for excitement and anxiety — the label changes the outcome</li></ul><blockquote>"Get excited." — Harvard psychologist Alison Wood Brooks' finding: it works.</blockquote>`,
-            qr:["I freeze completely","I need more strategies","What if I fail?"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Preparation & Power Poses",
-            text:`<p>Performance anxiety shrinks when preparation expands.</p><h3>📋 Pre-Performance Checklist</h3><ul><li>Over-prepare the first 2 minutes — once started, anxiety drops</li><li>Do a <strong>power pose</strong> (arms wide, chest open) for 2 mins before — it shifts hormones</li><li>Write down your <strong>3 key points</strong> and keep them as a safety net</li><li>Visualise the performance going <em>well</em>, not just the fear of failure</li></ul>`,
-            qr:["I still freeze","It's affecting my career","Need deeper help"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Mindful Performance",
-            text:`<p>Elite performers use <strong>present-moment focus</strong> to bypass performance anxiety entirely.</p><h3>🎯 Process Over Outcome</h3><ul><li>Focus entirely on the <em>process</em> (what you're doing right now) not the <em>outcome</em> (how you'll be judged)</li><li>Use a <strong>cue word</strong> to anchor focus: <em>"breathe," "here," "now"</em></li><li>Pre-performance routine — same ritual every time creates neural anchoring</li></ul><p>Athletes call this <em>"the zone."</em> It's accessible to everyone with practice.</p>`,
-            qr:["I want professional help","Still struggling","This is helpful"] },
-          { level:"pro", icon:"💎", title:"Pro: Performance Therapy",
-            text:`<p>Specialised performance anxiety coaching exists for exactly this.</p><h3>🌟 Specialist Options</h3><ul><li><strong>Performance psychologists</strong> — used by athletes, musicians, executives</li><li><strong>EMDR therapy</strong> — for anxiety rooted in past failures or trauma</li><li><strong>Hypnotherapy</strong> — some evidence for performance-specific anxiety</li><li><strong>Beta blockers</strong> — prescribed for physical symptoms (consult a doctor)</li></ul>`,
-            qr:["Find me a performance therapist","I want to know about EMDR","I need more info"] },
-        ]
-      },
-      health: {
-        label: "Health Anxiety",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Break the Reassurance Loop",
-            text:`<p>Health anxiety often involves <strong>repeated checking</strong> — symptoms, Google, your body. This temporarily relieves anxiety but makes it worse long-term.</p><h3>🛑 Immediate Rule</h3><ul><li>No health Googling for 24 hours (set a phone blocker if needed)</li><li>Limit self-checking to <strong>once per day</strong> at a set time</li><li>Postpone your worry: <em>"I'll think about this at 7pm — not now"</em></li></ul><blockquote>Every time you check, your brain learns the threat is real. Breaking the cycle is the first cure.</blockquote>`,
-            qr:["I'm scared something is seriously wrong","I check symptoms constantly","Need more strategies"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Uncertainty Tolerance",
-            text:`<p>Health anxiety is fundamentally a struggle to tolerate <strong>uncertainty</strong>. The goal isn't to eliminate uncertainty — it's to survive it.</p><h3>🧘 Tolerance Exercises</h3><ul><li>List all the things in your life you're already okay with not knowing</li><li>Ask: <em>"If I had a 90% chance of being fine, would I still be this worried?"</em> (You'd say yes — that reveals it's not about information)</li><li>Practice sitting with the uncomfortable thought for 10 mins without checking</li></ul>`,
-            qr:["I still can't stop worrying","I need a doctor","This is helping!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Interoceptive Exposure",
-            text:`<p>This is a clinical CBT technique: deliberately inducing the physical sensations you fear to desensitise your response.</p><h3>💡 Examples</h3><ul><li>Fear of fast heart rate → jog for 1 min and observe it</li><li>Fear of dizziness → spin in a chair and observe it</li><li>Fear of breathlessness → breathe through a straw for 1 min</li></ul><p>Each time you do this <em>intentionally</em>, your brain learns: <em>"This sensation is not dangerous."</em> The fear link weakens over time.</p>`,
-            qr:["I want a therapist","I can't do this alone","It's very severe"] },
-          { level:"pro", icon:"💎", title:"Pro: Clinical Support for Health Anxiety",
-            text:`<p>Severe health anxiety (sometimes called hypochondria or illness anxiety disorder) is a recognised condition with strong evidence-based treatments.</p><h3>🎯 Best Treatments</h3><ul><li><strong>CBT</strong> — specifically adapted for health anxiety</li><li><strong>ACT</strong> — learning to hold uncertainty with less distress</li><li><strong>SSRI medication</strong> — reduces the frequency and intensity of intrusive thoughts</li></ul><p>A GP or psychologist can diagnose and refer. You <em>deserve</em> targeted support.</p>`,
-            qr:["Help me find a professional","What is illness anxiety disorder?"] },
-        ]
-      },
-      general: {
-        label: "General Anxiety",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: 5-4-3-2-1 Grounding",
-            text:`<p>Anxiety pulls you into the future. Grounding pulls you back to <em>right now</em>.</p><h3>🌿 5-4-3-2-1 Technique</h3><ul><li><strong>5</strong> things you can <u>see</u></li><li><strong>4</strong> things you can <u>touch</u></li><li><strong>3</strong> things you can <u>hear</u></li><li><strong>2</strong> things you can <u>smell</u></li><li><strong>1</strong> thing you can <u>taste</u></li></ul><p>Do this slowly. The physical engagement interrupts the anxiety spiral.</p>`,
-            qr:["I need more help","What type is it?","This helped!"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Worry Scheduling",
-            text:`<p>Anxiety doesn't disappear when you try to suppress it — it grows. Instead, <strong>contain it</strong>.</p><h3>📅 Scheduled Worry Time</h3><ul><li>Set a 15-min daily "worry window" (e.g., 6pm every day)</li><li>When anxiety surfaces outside that time, write the worry down and <em>postpone it</em></li><li>At your worry window, review your list — many will feel less urgent</li><li>Problem-solve the actionable ones; accept the rest</li></ul><blockquote>You're not ignoring anxiety — you're putting it in its place.</blockquote>`,
-            qr:["My anxiety is constant","It's physical too","Need more strategies"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: GAD & Metacognitive Therapy",
-            text:`<p>If anxiety is persistent and generalised, it may be <strong>Generalised Anxiety Disorder (GAD)</strong>. A key driver is <em>beliefs about worrying itself</em>.</p><h3>🧠 Metacognitive Beliefs</h3><ul><li><em>Positive:</em> <strong>"Worrying keeps me safe / prepared"</strong> — this keeps you stuck in the worry loop</li><li><em>Negative:</em> <strong>"I can't control my worrying"</strong> — this amplifies panic</li></ul><h3>✂️ Detached Mindfulness</h3><ul><li>Observe your worry as passing mental events — not facts, not commands</li><li>Don't engage, analyse, or suppress — just observe and let pass</li></ul>`,
-            qr:["I think I have GAD","I want therapy","Tell me more"] },
-          { level:"pro", icon:"💎", title:"Pro: Medication + Therapy Combination",
-            text:`<p>For chronic, debilitating anxiety — combined treatment is often most effective.</p><h3>💊 What to Know</h3><ul><li><strong>SSRIs/SNRIs</strong> — first-line medication, takes 4–6 weeks to fully work</li><li><strong>Buspirone</strong> — non-addictive anti-anxiety medication</li><li><strong>Avoid long-term benzodiazepines</strong> — can cause dependence</li></ul><h3>🧠 Best Therapies for Anxiety</h3><ul><li>CBT — most evidence-backed</li><li>ACT — acceptance-based, highly effective for GAD</li><li>Mindfulness-Based Cognitive Therapy (MBCT)</li></ul><p>Please see a GP or psychiatrist — you <em>don't</em> have to live like this.</p>`,
-            qr:["Find me a psychiatrist","What is an SSRI?","I'm ready to get help"] },
-        ]
-      }
-    },
-    subQR:["Social anxiety","Performance anxiety","Health anxiety","General / I'm not sure"]
-  },
-
-  // ─── SADNESS ───────────────────────────────────────────────────────
-  sadness: {
-    label: "sadness",
-    subtypes: {
-      grief: {
-        label: "Grief & Loss",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Permission to Grieve",
-            text:`<p>Grief is not a problem to fix. It is <strong>love with nowhere to go</strong>. The most important thing right now is to let yourself feel it.</p><h3>💜 What Helps Right Now</h3><ul><li>You don't have to be okay. <em>Not being okay is okay.</em></li><li>Let yourself cry — it releases stress hormones</li><li>Accept support when offered — you don't have to do this alone</li><li>Eat, drink water, and sleep — grief depletes the body</li></ul><blockquote>Grief is the price of love, and it is worth every penny.</blockquote>`,
-            qr:["I feel numb","I can't function","It was recent","I need more support"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Navigating the Grief Process",
-            text:`<p>Grief is not a straight line — the stages (denial, anger, bargaining, depression, acceptance) can happen in any order, repeat, or overlap.</p><h3>🌊 What to Expect</h3><ul><li><strong>Grief waves</strong> — intense moments that pass; you are not going backwards</li><li><strong>Grief bursts</strong> — triggered by unexpected things (a song, a smell)</li><li><strong>Secondary losses</strong> — loss of identity, routine, future plans alongside the main loss</li></ul><h3>🌱 Gentle Support</h3><ul><li>Join a grief support group — shared understanding is deeply healing</li><li>Create a small ritual to honour what you lost</li></ul>`,
-            qr:["I'm stuck in one stage","I'm very angry","It's affecting my daily life","Need deeper help"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Complicated Grief",
-            text:`<p>If grief has been intense for 6+ months and is significantly impairing your life, it may be <strong>Prolonged Grief Disorder</strong> — and it responds well to treatment.</p><h3>🔍 Signs</h3><ul><li>Difficulty accepting the reality of the loss</li><li>Intense yearning or longing that doesn't diminish</li><li>Bitterness or anger about the loss remains severe</li><li>Difficulty engaging with memories or future plans</li></ul><h3>💙 Evidence-Based Treatment</h3><ul><li>Complicated Grief Therapy (CGT) — specialised, highly effective</li><li>EMDR — for grief involving trauma</li></ul>`,
-            qr:["I think I have this","I want therapy","I haven't been functioning for months"] },
-          { level:"pro", icon:"💎", title:"Pro: Grief Therapy & Support",
-            text:`<p>At this level, specialised grief support will help more than any self-help strategy.</p><h3>🌷 Your Options</h3><ul><li><strong>Grief counsellor or therapist</strong> — can hold space and guide processing</li><li><strong>Grief support groups</strong> (online or in-person) — GriefShare, local hospice programs</li><li><strong>Bereavement support lines</strong> in many countries offer free calls</li><li>If grief has led to depression, a psychiatrist can help with medication</li></ul><blockquote>You don't have to carry this alone. Asking for support is not weakness — it is wisdom.</blockquote>`,
-            qr:["Find me a grief counsellor","I'm having thoughts of self-harm","Thank you"] },
-        ]
-      },
-      loneliness: {
-        label: "Loneliness & Isolation",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Start With One Connection",
-            text:`<p>Loneliness is incredibly painful — and it's more common than you think. <strong>You reaching out here is a brave first step.</strong></p><h3>🤍 Today, Just One Thing</h3><ul><li>Text or call <em>one person</em> from your past — even a short message matters</li><li>If that feels too hard: go somewhere public (café, park) and just be around people</li><li>Listen to a podcast with a warm host — parasocial connection genuinely reduces loneliness temporarily</li></ul><blockquote>One genuine connection is worth a hundred surface-level interactions.</blockquote>`,
-            qr:["I have no one to contact","I've lost all my friends","I moved somewhere new","Need more help"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Building Connection Intentionally",
-            text:`<p>Loneliness often persists because we wait for connection to happen — rather than <strong>creating the conditions for it</strong>.</p><h3>🌱 Structured Connection-Building</h3><ul><li>Join a class, club, or group based on a hobby — <em>shared activity</em> is the best connection catalyst</li><li>Volunteer — shared purpose creates rapid bonding</li><li>Apps like <code>Meetup.com</code> or <code>Bumble BFF</code> for non-romantic connection</li><li>Show up consistently — friendships form through <em>repeated exposure</em></li></ul>`,
-            qr:["I feel too awkward to connect","Online connection isn't enough","I've tried and it didn't work","Need deeper help"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Loneliness & Identity",
-            text:`<p>Deep, chronic loneliness often connects to a sense of being <strong>fundamentally different or unlovable</strong>. That belief — not circumstance — is what needs healing.</p><h3>🧠 Core Belief Work</h3><ul><li>Write down the story you tell yourself about <em>why</em> you're lonely</li><li>Challenge each part: <em>Is this fact or fear? Has anyone ever connected with me? Does one rejection mean all will reject?</em></li><li>Practise <strong>self-compassion</strong>: how would you speak to a lonely friend?</li></ul><blockquote>"You are not fundamentally unlovable. That is a wound speaking, not a truth."</blockquote>`,
-            qr:["I believe I'm unlovable","I want therapy","Still struggling badly"] },
-          { level:"pro", icon:"💎", title:"Pro: Clinical Loneliness & Depression Link",
-            text:`<p>Chronic loneliness has been linked to depression, inflammation, and impaired immune function. At this level, professional support is essential — not optional.</p><h3>🏥 What to Seek</h3><ul><li>Therapist for <strong>schema therapy</strong> or <strong>interpersonal therapy (IPT)</strong></li><li>Medication assessment if depression has co-developed</li><li>Structured social rehabilitation in some mental health programs</li></ul><p>You <em>deserve</em> connection. It may require professional help to rebuild the belief that you're worthy of it.</p>`,
-            qr:["I want to find a therapist","I'm feeling really hopeless","I need crisis support"] },
-        ]
-      },
-      breakup: {
-        label: "Heartbreak / Breakup",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Survive Today",
-            text:`<p>Breakup pain activates the same brain regions as <em>physical pain</em>. What you're feeling is real, valid, and medically significant. Your only job right now is to <strong>survive today</strong>.</p><h3>💙 Immediate Care</h3><ul><li>Allow the emotion — crying is healing, not weakness</li><li>No contact with your ex for at least 2 weeks — every interaction reactivates the wound</li><li>Call a friend. You don't have to explain everything. Just say <em>"I need company."</em></li></ul><blockquote>You're not losing your mind. You're grieving. These are different things.</blockquote>`,
-            qr:["We share a living space","I keep contacting them","I feel like I'll never recover","Need more strategies"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Processing the Loss",
-            text:`<p>Once the acute pain settles slightly, there is important emotional work to do — not to rush healing, but to process it healthily.</p><h3>📓 Processing Exercises</h3><ul><li><strong>Unsent letter:</strong> Write everything you never said — don't send it</li><li><strong>Relationship audit:</strong> What did you love? What was hard? What did you learn?</li><li><strong>Reclaim your identity:</strong> List 10 things about you that existed before this relationship</li></ul><p>This isn't about blaming yourself or them — it's about <em>integration</em>.</p>`,
-            qr:["I'm obsessing over them","I want them back","I'm really struggling","It was toxic but I miss them"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Attachment & Patterns",
-            text:`<p>If you're cycling through the same type of relationship pain, your <strong>attachment style</strong> and <strong>relationship patterns</strong> may need examination.</p><h3>🔍 Patterns to Look For</h3><ul><li>Consistently attracted to unavailable people</li><li>Losing yourself completely in relationships</li><li>Fear of being alone driving you to stay or rush back</li><li>Relationships ending the same way repeatedly</li></ul><h3>🌱 The Work</h3><ul><li>Therapy specifically for attachment wounds gives deep, lasting results</li><li>Reading: <em>"Attached" by Levine & Heller</em> — the most practical guide on this</li></ul>`,
-            qr:["I have a pattern","I want therapy","Still in a lot of pain"] },
-          { level:"pro", icon:"💎", title:"Pro: When Grief Becomes Clinical Depression",
-            text:`<p>Breakup grief can tip into clinical depression, especially if: it's lasted 2+ months with no improvement, you're not functioning, or you have passive thoughts about not existing.</p><h3>🚨 Signs It's More Than Heartbreak</h3><ul><li>Unable to eat, sleep, or work for weeks</li><li>Complete loss of interest in all other areas of life</li><li>Thoughts of hopelessness about your entire future</li><li>Any thoughts of self-harm</li></ul><p><strong>Please reach out to a professional.</strong> Heartbreak-related depression is very treatable.</p>`,
-            qr:["I'm having dark thoughts","I need crisis support","Find me a therapist"] },
-        ]
-      },
-      general: {
-        label: "General Sadness / Feeling Low",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Acknowledge & Self-Nurture",
-            text:`<p>Sometimes sadness doesn't have a clear reason — and that's completely okay. You don't need to justify your feelings.</p><h3>🌷 Basic Self-Care Right Now</h3><ul><li>Drink a glass of water — dehydration worsens mood significantly</li><li>Step outside for even 5 minutes — natural light affects serotonin</li><li>Put on music that matches your mood (not forces happiness)</li><li>Let yourself be sad without judging yourself for it</li></ul><blockquote>Sadness is information, not a malfunction. Your feelings are valid.</blockquote>`,
-            qr:["It's been going on for weeks","I don't know why I feel this way","I've lost interest in things","Need more help"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Behavioural Activation",
-            text:`<p>When we're sad, we withdraw — and withdrawal deepens sadness. <strong>Behavioural activation</strong> breaks this cycle with small, intentional actions.</p><h3>⚡ The Activation Ladder</h3><ul><li>List 5 activities that used to give you <em>pleasure or mastery</em></li><li>Rank them easiest → hardest</li><li>Do the <strong>easiest one today</strong> — even for 10 minutes</li><li>You don't need to feel like it first — action creates feeling, not the reverse</li></ul>`,
-            qr:["I can't find motivation","Everything feels pointless","I think it might be depression","Need deeper strategies"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Depression Screening",
-            text:`<p>Persistent sadness lasting 2+ weeks, especially with other symptoms, may indicate <strong>clinical depression</strong>.</p><h3>📋 PHQ-9 Symptom Check (last 2 weeks)</h3><ul><li>Little interest or pleasure in things?</li><li>Feeling down, depressed, or hopeless?</li><li>Sleep problems (too much or too little)?</li><li>Low energy or fatigue?</li><li>Difficulty concentrating?</li><li>Negative feelings about yourself?</li></ul><p>If you said yes to 5+ of these nearly every day — <strong>please speak to a doctor</strong>. Depression is a medical condition with excellent treatments.</p>`,
-            qr:["I said yes to most of these","I want to talk to a professional","I'm not sure if I'm depressed"] },
-          { level:"pro", icon:"💎", title:"Pro: Depression Treatment Options",
-            text:`<p>Clinical depression is highly treatable — but it usually requires professional support.</p><h3>💊 Treatment Landscape</h3><ul><li><strong>Psychotherapy:</strong> CBT, behavioural activation therapy, IPT — all highly effective</li><li><strong>Medication:</strong> SSRIs, SNRIs — work best combined with therapy</li><li><strong>Lifestyle:</strong> Exercise has antidepressant effect comparable to mild medication</li><li><strong>Light therapy:</strong> Especially for seasonal depression (SAD)</li></ul><p>Recovery is not only possible — it is <em>likely</em> with the right support. Please reach out to a GP or mental health professional today.</p>`,
-            qr:["How do I find a therapist?","What is an antidepressant?","I'm ready to get help","I need crisis support"] },
-        ]
-      }
-    },
-    subQR:["Grief / Loss","Loneliness","Heartbreak","General sadness / feeling low"]
-  },
-
-  // ─── FEELING GREAT ─────────────────────────────────────────────────
-  great: {
-    label: "positive feeling",
-    subtypes: {
-      energised: {
-        label: "Energised & Motivated",
-        levels: [
-          { level:"basic", icon:"🌟", title:"Ride the Wave 🌊",
-            text:`<p>You're in a great flow state — <strong>use it wisely!</strong></p><h3>⚡ Make the Most of This Energy</h3><ul><li>Tackle your most challenging task first while your mind is sharp</li><li>Start something you've been putting off — momentum is a gift</li><li>Schedule your next high-priority item for later this week while the motivation is fresh</li></ul><blockquote>Motivation is a visitor, not a resident. Capture it while it's here.</blockquote>`,
-            qr:["How do I make this last?","I want to level up","Help me set goals"] },
-          { level:"intermediate", icon:"🌿", title:"Build Sustainable Momentum",
-            text:`<p>Feeling energised is wonderful — now let's make this state more <em>consistent</em>.</p><h3>🔋 Momentum Habits</h3><ul><li>Identify what created this energy today — replicate those conditions</li><li>Set up a <strong>"trigger ritual"</strong> — same playlist, same time, same space = trained motivation</li><li>Track your energy levels across the week to find your peak hours</li></ul>`,
-            qr:["Tell me about goal setting","I want to build better habits","What's next level?"] },
-          { level:"advanced", icon:"🔥", title:"Channel Into Your Bigger Goals",
-            text:`<p>Sustained motivation is about connecting daily actions to <strong>meaningful purpose</strong>.</p><h3>🎯 Purpose Mapping</h3><ul><li>Write your 1-year and 5-year vision — what matters most?</li><li>Break it into quarterly milestones, monthly targets, weekly actions</li><li>Review this when motivation dips — <em>reconnection to purpose restores drive</em></li></ul><blockquote>Energy without direction is just noise. Purpose gives it shape.</blockquote>`,
-            qr:["Help me find my purpose","I want to go deeper","Share the pro level"] },
-          { level:"pro", icon:"💎", title:"Protect Your Wellbeing Ecosystem",
-            text:`<p>Peak performance is sustainable only when your <strong>foundations are maintained</strong>.</p><h3>🏗️ The Performance Ecosystem</h3><ul><li><strong>Recovery:</strong> Match effort with deliberate rest — athletes call this periodisation</li><li><strong>Relationships:</strong> Strong social bonds are the #1 predictor of long-term wellbeing</li><li><strong>Meaning:</strong> Regular reflection on what matters prevents burnout</li><li><strong>Body:</strong> Sleep, movement, nutrition underpin everything else</li></ul>`,
-            qr:["This is inspiring, thanks!","Check in on another topic","I'm doing great!"] }
-        ]
-      },
-      peaceful: {
-        label: "Peaceful & Content",
-        levels: [
-          { level:"basic", icon:"🌟", title:"Savour This Moment 🕊️",
-            text:`<p>Contentment is often undervalued — but it's one of the most psychologically healthy states. <strong>Savour it.</strong></p><h3>🌿 Savouring Practice</h3><ul><li>Name 3 specific things that are good right now</li><li>Sit with the good feeling for 30 seconds — don't rush past it</li><li>Share it: tell someone what's going well</li></ul><blockquote>"Peace is not the absence of trouble. It is the presence of trust." Savour this.</blockquote>`,
-            qr:["How do I stay in this state?","I want to deepen this","Help me build on this peace"] },
-          { level:"intermediate", icon:"🌿", title:"Anchor This Feeling",
-            text:`<p>Peace is a state you can train yourself to return to more easily.</p><h3>⚓ Anchoring Technique</h3><ul><li>While feeling peaceful, press two fingers together and hold for 10 seconds</li><li>Later, when stressed, use the same physical gesture to <em>cue the state</em></li><li>This is an NLP anchoring technique — it genuinely creates a conditioned response over time</li></ul>`,
-            qr:["Tell me about mindfulness","I want a daily practice","What's the advanced level?"] },
-          { level:"advanced", icon:"🔥", title:"Cultivate a Mindfulness Practice",
-            text:`<p>Peaceful contentment becomes more accessible when you have a daily practice.</p><h3>🧘 Building a Practice</h3><ul><li><strong>10 minutes daily</strong> of mindfulness meditation reduces amygdala reactivity measurably</li><li>Apps: <code>Insight Timer</code> (free), <code>Waking Up</code>, <code>Ten Percent Happier</code></li><li>Gratitude journalling (3 items/night) builds a positive neural baseline over 3–4 weeks</li></ul>`,
-            qr:["I want to share this feeling","Tell me the pro level","This is really helpful!"] },
-          { level:"pro", icon:"💎", title:"Share Your Wellbeing",
-            text:`<p>When we're well, we have the capacity to help others — and that itself deepens our own wellbeing.</p><h3>💙 Prosocial Wellbeing</h3><ul><li>Acts of kindness increase our own serotonin as much as the recipient's</li><li>Mentor someone, volunteer, or simply check in on someone you care about</li><li>Connection is both the cause and result of lasting wellbeing</li></ul><blockquote>Happiness shared is happiness multiplied.</blockquote>`,
-            qr:["That's beautiful, thank you","Check in on another topic","I want to explore gratitude"] }
-        ]
-      },
-      grateful: {
-        label: "Feeling Grateful",
-        levels: [
-          { level:"basic", icon:"🌟", title:"Amplify Your Gratitude 🙏",
-            text:`<p>Gratitude is one of the most researched positive emotions. When you feel it, <strong>going deeper amplifies its benefits</strong>.</p><h3>📓 Gratitude Depth Practice</h3><ul><li>Instead of listing <em>what</em> you're grateful for — write <em>why</em> and <em>what it means to you</em></li><li>Tell someone directly that you're grateful for them — in detail</li><li>Imagine your life without the good things — it makes them more vivid</li></ul><blockquote>"Gratitude turns what we have into enough." — Aesop</blockquote>`,
-            qr:["How do I make gratitude a habit?","Tell me more","Share the next level"] },
-          { level:"intermediate", icon:"🌿", title:"Build a Gratitude Practice",
-            text:`<p>The most impactful thing you can do with gratitude is <strong>make it a daily habit</strong>.</p><h3>🏗️ Gratitude Architecture</h3><ul><li>5 minutes each morning: write 3 <em>specific</em> things (not generic "health, family")</li><li><strong>Gratitude letters</strong> — write a letter to someone who helped you and never heard it</li><li>Weekly: What went well? Why? What was your role in it?</li></ul>`,
-            qr:["I want to write a gratitude letter","Gratitude through hard times?","Next level please"] },
-          { level:"advanced", icon:"🔥", title:"Gratitude as a World View",
-            text:`<p>Advanced gratitude practice transforms how you perceive <em>challenges</em>, not just blessings.</p><h3>🌊 Reframing Adversity</h3><ul><li>What has a past difficulty taught you?</li><li>What strength did you develop through a hard time?</li><li>Post-traumatic <em>growth</em> — many people find meaning and gratitude in past struggles</li></ul><p>This isn't toxic positivity — it's <em>integrative gratitude</em>, which acknowledges both pain and growth.</p>`,
-            qr:["I want to express gratitude to someone","Tell me the pro level","This resonates deeply"] },
-          { level:"pro", icon:"💎", title:"Gratitude as Connection",
-            text:`<p>The deepest form of gratitude involves others.</p><h3>💙 Expressed Gratitude</h3><ul><li>Visit or call someone you've never properly thanked</li><li>Research shows the <strong>gratitude visit</strong> is one of the single most powerful happiness interventions</li><li>Keep a relationship gratitude log — what do you appreciate about those close to you?</li></ul><blockquote>Unexpressed gratitude is like a gift never given. Say it out loud.</blockquote>`,
-            qr:["That's beautiful, thank you","I'm going to call someone now","Explore another topic"] }
-        ]
-      },
-      accomplished: {
-        label: "Accomplished / Proud",
-        levels: [
-          { level:"basic", icon:"🌟", title:"Celebrate Your Win 🏆",
-            text:`<p>You did something worth feeling proud about. <strong>Don't rush past it.</strong></p><h3>🎉 Own It</h3><ul><li>Say it out loud or write it down: <em>"I am proud of myself for..."</em></li><li>Share it with someone who will celebrate with you — not everyone will, choose wisely</li><li>Treat yourself to something — small pleasures reinforce positive identity</li></ul><blockquote>You are allowed to feel genuinely good about what you did. You earned it.</blockquote>`,
-            qr:["How do I build on this?","I want to set a bigger goal","Tell me the next level"] },
-          { level:"intermediate", icon:"🌿", title:"Build on the Momentum",
-            text:`<p>Use the confidence from this win as a <strong>launch pad</strong>.</p><h3>🚀 The Confidence Compound Effect</h3><ul><li>Identify what skills or strengths this win demonstrated</li><li>Set a slightly bigger challenge that builds on this area</li><li>Update your self-concept: <em>"I am someone who can..."</em></li></ul>`,
-            qr:["I want to review what worked","Help me set a bigger goal","Tell me the advanced level"] },
-          { level:"advanced", icon:"🔥", title:"Reflect for Growth",
-            text:`<p>Peak performers review their wins as carefully as their failures.</p><h3>📊 After-Action Review</h3><ul><li>What worked? Why exactly?</li><li>What would you do differently?</li><li>What did this reveal about your strengths?</li><li>How can you apply this learning to a future challenge?</li></ul>`,
-            qr:["I want to connect this to my identity","Tell me the pro level","This is really powerful"] },
-          { level:"pro", icon:"💎", title:"Integrate Into Identity",
-            text:`<p>The most durable form of confidence comes from a stable, positive <strong>self-identity</strong> — not just individual achievements.</p><h3>🏗️ Identity Work</h3><ul><li>Write 5 character strengths this accomplishment reflected</li><li>Connect this to your larger narrative: <em>"I am someone who..."</em></li><li>Research <em>Values In Action (VIA) Character Strengths</em> — free assessment at <code>viacharacter.org</code></li></ul><blockquote>Your accomplishments are evidence of who you already are.</blockquote>`,
-            qr:["That's really inspiring!","I want to explore other topics","Thank you ClayBot 🌟"] }
-        ]
-      }
-    },
-    subQR:["Energised & motivated","Peaceful & content","Feeling grateful","Accomplished / proud"]
-  },
-
-  // ─── COPING TIPS ───────────────────────────────────────────────────
-  coping: {
-    label: "coping",
-    subtypes: {
-      overwhelm: {
-        label: "Overwhelm / Too Much At Once",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: One Breath, One Thing",
-            text:`<p>Overwhelm happens when your brain perceives more demands than it has capacity to handle. The antidote is <strong>radical narrowing</strong>.</p><h3>🎯 The One-Thing Rule</h3><ul><li>Stop. Literally put everything down for 60 seconds</li><li>Ask: <em>"What is the ONE thing that most needs to happen today?"</em></li><li>Do only that. Everything else is background noise right now</li></ul><blockquote>You don't have to eat the whole elephant. One bite, one moment.</blockquote>`,
-            qr:["I have too many urgent things","I need to organise better","Still feeling overwhelmed","This helped a bit"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Triage & Offload",
-            text:`<p>Get it all out of your head and onto paper — your brain isn't built to hold everything simultaneously.</p><h3>📝 Mind Dump + Triage</h3><ul><li>Write every task, worry, and obligation onto paper — all of it</li><li>Mark each: <strong>Urgent+Important | Important | Delegate | Delete</strong></li><li>Only the first category gets your attention today</li><li>Schedule the "important" items; let go of the rest</li></ul>`,
-            qr:["I can't delegate anything","My boundaries are bad","I need a system change","This is helping!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Systemic Change",
-            text:`<p>If overwhelm is chronic, the problem isn't your coping — it's your <strong>system and boundaries</strong>.</p><h3>🏗️ Systems Audit</h3><ul><li>Where are you consistently over-committing?</li><li>Which commitments drain more than they give?</li><li>Practise the <em>hell yes or no rule</em>: if it's not a clear yes, it's a no</li><li>Build <strong>buffer time</strong> into your schedule — 20% free capacity changes everything</li></ul>`,
-            qr:["I think I have burnout","I struggle to say no","Nothing is changing","I want professional help"] },
-          { level:"pro", icon:"💎", title:"Pro: Chronic Overwhelm = Burnout",
-            text:`<p>Persistent overwhelm without recovery is the definition of burnout — and it requires more than tips.</p><ul><li>Mandatory rest period (days or weeks)</li><li>Structural changes to workload or life demands</li><li>Therapy to address perfectionism, people-pleasing, or boundary issues</li><li>Medical assessment if physical symptoms are present</li></ul>`,
-            qr:["I need to see a therapist","I think I have burnout","Tell me about professional help"] }
-        ]
-      },
-      procrastination: {
-        label: "Procrastination",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: The 2-Minute Start",
-            text:`<p>Procrastination is almost always about <strong>starting</strong>, not doing. The brain avoids the discomfort of beginning — not the task itself.</p><h3>⏱️ The 2-Minute Rule</h3><ul><li>Commit to doing the task for just <em>2 minutes</em></li><li>Set a timer. When it goes off, you can stop — but you usually won't want to</li><li>The <strong>Zeigarnik Effect</strong>: your brain wants to finish what it's started</li></ul><blockquote>You don't have to feel ready. You just have to start.</blockquote>`,
-            qr:["I avoid the task completely","I think I fear failure","I'm a perfectionist","Need something deeper"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Why You're Procrastinating",
-            text:`<p>There are different <em>types</em> of procrastination with different solutions.</p><h3>🔍 Diagnose Your Type</h3><ul><li><strong>Fear of failure:</strong> Avoidance feels safer than risking judgment → Self-compassion + reframe mistakes as learning</li><li><strong>Perfectionism:</strong> Can't start unless it's perfect → "Good enough" standards; progress over perfection</li><li><strong>Overwhelm:</strong> Task feels too big → Break it into 20-min sub-tasks</li><li><strong>Boredom:</strong> Task feels pointless → Connect to a bigger purpose</li></ul>`,
-            qr:["I understand my type now","Tell me about implementation intentions","I still can't get started","This is really helpful"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Implementation Intentions",
-            text:`<p>The most evidence-backed procrastination intervention is <strong>implementation intentions</strong> — a simple "when-then" formula.</p><h3>📋 How It Works</h3><ul><li><em>"When [specific cue], I will [specific action] in [specific place]."</em></li><li>Example: <em>"When I sit down at my desk after lunch, I will open my report draft for 25 minutes."</em></li><li>Studies show this increases follow-through by 200–300%</li><li>Pair with a specific environment: same place = trained focus response</li></ul>`,
-            qr:["I've tried everything and it persists","Could I have ADHD?","I want the pro level","This worked!"] },
-          { level:"pro", icon:"💎", title:"Pro: ADHD & Executive Function",
-            text:`<p>If procrastination is <em>persistent, severe, and lifelong</em> — it may reflect executive function differences, including undiagnosed ADHD.</p><h3>🔍 Consider Assessment If</h3><ul><li>Procrastination occurs across all life areas, not just one</li><li>You have a pattern of starting many things and finishing few</li><li>Time blindness, hyperfocus, emotional dysregulation are also present</li><li>You've tried every strategy and nothing sticks</li></ul><p>A psychiatrist or psychologist can assess for ADHD. <strong>It's very treatable — and it changes lives.</strong></p>`,
-            qr:["I want an ADHD assessment","Find me a psychologist","Tell me more about ADHD","I need professional help"] }
-        ]
-      },
-      anger: {
-        label: "Anger & Frustration",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Physical Discharge",
-            text:`<p>Anger is a physiological state — cortisol and adrenaline flood your body. You need to <strong>discharge it physically</strong> first.</p><h3>⚡ Immediate Physical Release</h3><ul><li>Go for a fast walk or run — even 5 minutes</li><li>Do 10 jumping jacks or push-ups</li><li>Clench every muscle in your body for 10 seconds, then release completely</li><li>Splash cold water on your face</li></ul><blockquote>You can't reason your way out of an emotion. Move the body first.</blockquote>`,
-            qr:["I need to understand why I'm angry","I said something I regret","I keep exploding at people","This helped a bit"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: The Anger Audit",
-            text:`<p>Underneath most anger is a <strong>threatened value or unmet need</strong>.</p><h3>🔍 The Audit Questions</h3><ul><li>What exactly triggered this anger?</li><li>What <em>value</em> was violated? (fairness, respect, safety, autonomy)</li><li>What <em>need</em> is unmet? (to be heard, to be treated fairly)</li><li>What are you <em>actually</em> feeling beneath the anger? (hurt, fear, shame)</li></ul><p>Naming the need makes the path forward clearer — and often, less explosive.</p>`,
-            qr:["I know why but I can't control it","My anger is hurting my relationships","Tell me about reappraisal","This makes sense!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Cognitive Reappraisal",
-            text:`<p>Anger is amplified by <strong>interpretations</strong>, not just events. Changing the interpretation changes the emotion.</p><h3>🧠 Reappraisal Steps</h3><ul><li>State what happened factually: <em>"They didn't respond to my message."</em></li><li>Notice the interpretation: <em>"They don't respect me."</em></li><li>Generate alternatives: <em>"They might be busy, struggling, or it's not about me."</em></li><li>Ask: <em>"Which interpretation serves me better — and is there evidence it could be true?"</em></li></ul>`,
-            qr:["My anger is chronic and deep","I think I need therapy","It's a lifelong pattern","This is really useful"] },
-          { level:"pro", icon:"💎", title:"Pro: Chronic Anger & Therapy",
-            text:`<p>If anger is a recurring pattern in your life — affecting relationships, work, or health — it deserves dedicated therapeutic attention.</p><h3>🌟 Effective Approaches</h3><ul><li><strong>Anger management therapy</strong> — structured, CBT-based</li><li><strong>Schema therapy</strong> — for anger rooted in childhood experiences</li><li><strong>Mindfulness-Based Stress Reduction (MBSR)</strong></li><li><strong>Medical check:</strong> Thyroid conditions, testosterone, and blood sugar can all affect anger levels</li></ul>`,
-            qr:["Find me an anger therapist","I want a medical check","Tell me about professional help"] }
-        ]
-      },
-      motivation: {
-        label: "Lack of Motivation",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Action Before Feeling",
-            text:`<p>The biggest motivation myth is that you have to <em>feel</em> motivated before acting. Science says the opposite: <strong>action creates motivation</strong>.</p><h3>⚡ Start Tiny</h3><ul><li>Do the task for just 5 minutes — don't decide if you'll continue, just start</li><li>The <em>activation energy</em> to start is the whole obstacle</li><li>Put on your shoes. Open the document. Fill the glass of water. Just the first physical step.</li></ul><blockquote>Don't wait for the feeling. Create it by moving.</blockquote>`,
-            qr:["I don't care about anything","I've lost my purpose","Nothing feels meaningful","Need more strategies"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Values-Based Motivation",
-            text:`<p>Motivation built on <em>should</em> is fragile. Motivation built on <em>meaning</em> is durable.</p><h3>🎯 Find the Why</h3><ul><li>Ask: <em>Why does this matter? What value does it serve?</em></li><li>Connect the task to a person or goal you care about</li><li>Reframe: not <em>"I have to go to the gym"</em> but <em>"I'm choosing this because I value my energy and health"</em></li></ul>`,
-            qr:["I've lost connection to my values","Tell me about environment design","I need a deeper fix","This is helping!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Environmental Design",
-            text:`<p>Willpower is finite. <strong>Environment design</strong> makes motivation automatic.</p><h3>🏗️ Design Your Environment</h3><ul><li>Put your workout clothes next to your bed</li><li>Keep your book on the kitchen table, not the shelf</li><li>Use a separate browser for work — signals brain into work mode</li><li>Reduce friction for good habits; increase it for distractions (delete apps, use app timers)</li></ul>`,
-            qr:["Nothing brings me joy anymore","I think it might be depression","I want the pro level","This helped a lot!"] },
-          { level:"pro", icon:"💎", title:"Pro: Anhedonia — When Nothing Feels Worth It",
-            text:`<p>If nothing feels motivating or rewarding — not just one area but broadly — this is <em>anhedonia</em>, a core symptom of depression.</p><h3>🔍 Signs</h3><ul><li>Activities you used to love feel flat or joyless</li><li>Nothing feels worth looking forward to</li><li>Low energy that sleep doesn't fix</li></ul><p>This is a neurobiological change — not laziness, not failure. A doctor or therapist can help significantly. <strong>Please reach out.</strong></p>`,
-            qr:["I need to see a doctor","I think I have depression","Find me professional help"] }
-        ]
-      }
-    },
-    subQR:["I'm overwhelmed","I'm procrastinating","I'm angry / frustrated","I lack motivation"]
-  },
-
-  // ─── SLEEP ─────────────────────────────────────────────────────────
-  sleep: {
-    label: "sleep issues",
-    subtypes: {
-      insomnia: {
-        label: "Can't Fall Asleep",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Wind-Down Routine",
-            text:`<p>Your brain needs a <strong>clear signal</strong> that it's time to sleep — it doesn't switch off on command.</p><h3>🌙 30-Minute Wind-Down Protocol</h3><ul><li>Dim all lights 30 minutes before bed — darkness triggers melatonin</li><li>No screens (phones, TV, laptop) — or use blue light glasses</li><li>Do one calming activity: reading a physical book, gentle stretching, warm shower</li><li>Keep your room cool: <strong>65–68°F / 18–20°C</strong> is the proven optimal sleep temperature</li><li>Write down tomorrow's to-do list — offloads the mental chatter</li></ul><blockquote>Sleep begins 8 hours before you lie down. Start building it earlier.</blockquote>`,
-            qr:["Still lying awake for hours","My mind races at night","I need more strategies","This helped a bit"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Sleep Restriction Therapy",
-            text:`<p>Counterintuitive but highly effective: <strong>sleep restriction</strong> builds sleep pressure and resets your drive to sleep.</p><h3>⏰ How It Works</h3><ul><li>Decide a fixed <strong>wake time</strong> (e.g., 7am) — do not deviate, including weekends</li><li>Initially only go to bed when you are <em>genuinely sleepy</em> — even if that's 1–2am</li><li>No naps during the day — you need to build sleep pressure</li><li>After 1 week, your sleep consolidates; move bedtime 15 mins earlier each week</li></ul><h3>💡 Mind Racing Fix</h3><ul><li>Keep a "worry dump" notepad by your bed — write thoughts out, then mentally close the tab</li><li>Try the <strong>military sleep method</strong>: relax face, drop shoulders, imagine a calm scene for 10s</li></ul>`,
-            qr:["I tried this, still can't sleep","It's anxiety keeping me awake","I need something stronger","This is helping!"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: CBT-I (Gold Standard)",
-            text:`<p>CBT for Insomnia (CBT-I) is <em>more effective than sleep medication</em> long-term, with no side effects. It is the clinical gold standard.</p><h3>🧠 Core CBT-I Components</h3><ul><li><strong>Sleep diary</strong> — track sleep/wake times, quality, stress for 1 week</li><li><strong>Stimulus control</strong> — bed is for sleep only; leave bed if awake for 20+ minutes</li><li><strong>Cognitive restructuring</strong> — challenge catastrophic thoughts (<em>"I'll never function if I don't sleep"</em>)</li><li><strong>Relaxation training</strong> — PMR, guided imagery, autogenic training before bed</li></ul><h3>📱 Digital CBT-I</h3><ul><li><code>Sleepio</code> — digital CBT-I with strong clinical evidence</li><li><code>Somryst</code> — FDA-approved digital therapeutic for insomnia</li></ul>`,
-            qr:["Nothing is working","I've had insomnia for months","I want to see a doctor","This is really useful"] },
-          { level:"pro", icon:"💎", title:"Pro: Medical Assessment for Chronic Insomnia",
-            text:`<p>Chronic insomnia (3+ nights/week for 3+ months) warrants a medical investigation — there may be an underlying cause.</p><h3>🏥 Rule Out These Causes</h3><ul><li><strong>Sleep apnea</strong> — very common, very treatable, massively impairs sleep quality (ask your GP for a sleep study)</li><li><strong>Restless Leg Syndrome</strong> — causes urge to move legs at night; often iron-linked</li><li><strong>Thyroid disorders</strong> — both hypo and hyperthyroid disrupt sleep</li><li><strong>Anxiety / depression</strong> — sleep disturbance is often a primary symptom</li><li><strong>Chronic pain</strong> — may need its own assessment</li></ul><p>A GP can refer for a sleep study, relevant blood tests, and specialist support. <strong>You don't have to accept bad sleep as normal.</strong></p>`,
-            qr:["I want to see a sleep doctor","I think I have sleep apnea","Connect me with professional help"] },
-        ]
-      },
-      waking: {
-        label: "Waking Up During the Night",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Don't Fight Being Awake",
-            text:`<p>Waking in the night is normal — most people do it 4–6 times without realising. The problem is when you <strong>become anxious about it</strong>, which makes it harder to fall back asleep.</p><h3>🌙 What To Do When You Wake</h3><ul><li>Do <strong>not</strong> check your phone or clock — time-watching amplifies anxiety</li><li>Lie still, breathe slowly, and tell yourself: <em>"This is normal. I'll drift off again."</em></li><li>Try the <strong>4-7-8 breath</strong>: inhale 4s, hold 7s, exhale 8s — repeat 4 times</li><li>Keep the room dark and don't turn on lights</li></ul><blockquote>Most wakings last only 1–5 minutes. What you do during them determines whether you sleep again.</blockquote>`,
-            qr:["I wake up 3–4 times a night","I can't fall back asleep","It's stress waking me","Need more strategies"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Sleep Architecture & Causes",
-            text:`<p>Frequent waking usually has a <strong>specific cause</strong> — finding it is the most efficient fix.</p><h3>🔍 Common Triggers</h3><ul><li><strong>Alcohol</strong> — disrupts sleep architecture in the second half of the night; even 1–2 drinks worsens waking</li><li><strong>Caffeine</strong> — has a 6-hour half-life; afternoon coffee affects 2am sleep</li><li><strong>Temperature</strong> — too warm = more waking; keep room at 18–20°C</li><li><strong>Full bladder</strong> — limit fluids after 7pm; check for underlying urinary issues</li><li><strong>Stress hormones</strong> — cortisol spikes at 2–4am; stress management helps this directly</li></ul>`,
-            qr:["I wake up anxious","I wake up to use the bathroom","I still don't know why","Need deeper help"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Stimulus Control & Sleep Consolidation",
-            text:`<p>If you wake frequently and lie in bed awake for long periods, the bed may have become <strong>associated with wakefulness</strong> rather than sleep. This can be re-trained.</p><h3>🔄 Reconditioning Protocol</h3><ul><li>If awake 20+ minutes: get out of bed and go to another dark, quiet room</li><li>Do something calm and boring (reading, gentle stretching) — no screens</li><li>Only return to bed when you feel drowsy again</li><li>This feels counterintuitive but <em>re-pairs your bed with sleep within 1–2 weeks</em></li></ul><h3>🧘 Mindfulness for Night Waking</h3><ul><li>Body scan meditation while lying still — systematically relax each body part</li><li>Apps: <code>Calm</code>, <code>Insight Timer</code> have dedicated "back to sleep" sessions</li></ul>`,
-            qr:["I'm exhausted from broken sleep","Could it be sleep apnea?","I want medical help"] },
-          { level:"pro", icon:"💎", title:"Pro: Medical Causes of Night Waking",
-            text:`<p>Persistent, unexplained waking warrants medical investigation — especially if accompanied by snoring, gasping, or daytime fatigue.</p><h3>🏥 Investigate These</h3><ul><li><strong>Obstructive Sleep Apnea (OSA)</strong> — breathing interruptions wake you; snoring is a key sign; CPAP is highly effective</li><li><strong>Nocturia</strong> — frequent night urination; can be prostate, kidney, cardiac, or medication-related</li><li><strong>Hypoglycaemia</strong> — blood sugar drops at night; common in diabetics</li><li><strong>Anxiety disorder / PTSD</strong> — hyperarousal keeps the nervous system active</li></ul><p>See your GP and ask for a <strong>sleep study referral</strong> if waking has persisted 3+ months.</p>`,
-            qr:["I snore and wake gasping","I want a sleep study","Find me a sleep specialist"] },
-        ]
-      },
-      tiredness: {
-        label: "Always Tired / No Energy",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Energy Audit",
-            text:`<p>Feeling tired despite sleeping is frustrating — but it usually has a clear cause. Let's find yours.</p><h3>🔍 Quick Energy Audit</h3><ul><li><strong>How many hours are you actually sleeping?</strong> (Under 7 = sleep debt)</li><li><strong>What's your sleep quality like?</strong> (Do you wake often, snore, feel unrefreshed?)</li><li><strong>How much water do you drink?</strong> (Dehydration = major fatigue)</li><li><strong>What does your diet look like?</strong> (Sugar spikes followed by crashes = afternoon slump)</li></ul><h3>⚡ Immediate Energy Boosts</h3><ul><li>Drink 500ml of water first thing — dehydration upon waking is common</li><li>Get 10 minutes of morning sunlight — regulates your circadian clock</li><li>A 20-min nap (no longer!) can restore alertness without disrupting night sleep</li></ul><blockquote>Tiredness is information, not a character flaw. Let's decode it.</blockquote>`,
-            qr:["I sleep 8+ hours but still tired","I crash in the afternoons","It's been months of fatigue","Need more help"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Sleep Quality vs Sleep Quantity",
-            text:`<p>8 hours of poor-quality sleep can leave you more tired than 6 hours of deep, restorative sleep. <strong>Quality matters more than quantity.</strong></p><h3>🏗️ Improving Sleep Quality</h3><ul><li>Consistent wake time — even weekends — anchors your circadian rhythm</li><li>Avoid alcohol: it fragments deep sleep even if it helps you fall asleep initially</li><li>Eat your last meal 2–3 hours before bed — digestion disrupts deep sleep</li><li>Exercise regularly — even 20 mins improves slow-wave sleep by up to 75%</li></ul><h3>📊 Track It</h3><ul><li>Use a wearable (Fitbit, Garmin, Apple Watch) or app (<code>Sleep Cycle</code>) to understand your actual sleep stages</li></ul>`,
-            qr:["I have good habits but still tired","Could something medical be wrong?","I need deeper help"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Circadian Rhythm Reset",
-            text:`<p>Persistent fatigue often reflects a <strong>misaligned circadian rhythm</strong> — your internal body clock is out of sync with your lifestyle.</p><h3>⏰ Circadian Reset Protocol</h3><ul><li><strong>Morning light</strong> — 10–20 mins of bright outdoor light within 1 hour of waking (most powerful circadian signal)</li><li><strong>Consistent sleep/wake times</strong> — within 30 minutes, every single day</li><li><strong>Avoid bright light 2 hours before bed</strong> — use dim, warm lighting only</li><li><strong>Time your meals</strong> — eating late pushes your internal clock back</li></ul><p>A consistent schedule for 2 weeks typically produces noticeable improvement in energy levels.</p>`,
-            qr:["I've tried this and still tired","I think it's a medical issue","I want to see a doctor"] },
-          { level:"pro", icon:"💎", title:"Pro: Medical Causes of Chronic Fatigue",
-            text:`<p>Fatigue lasting 3+ months with no clear cause requires medical investigation — it is a symptom, not a condition itself.</p><h3>🏥 Rule Out These Conditions</h3><ul><li><strong>Anaemia</strong> — iron or B12 deficiency; very common, very treatable</li><li><strong>Hypothyroidism</strong> — underactive thyroid causes persistent fatigue, weight gain, brain fog</li><li><strong>Sleep Apnea</strong> — poor oxygenation during sleep prevents restorative sleep</li><li><strong>Chronic Fatigue Syndrome (ME/CFS)</strong> — a genuine medical condition, not laziness</li><li><strong>Diabetes / blood sugar dysregulation</strong></li><li><strong>Depression</strong> — fatigue is often its most prominent symptom</li></ul><p>A blood panel from your GP can rule out most of these quickly. <strong>Please don't suffer in silence.</strong></p>`,
-            qr:["I think I have thyroid issues","I want blood tests","I think it might be depression","Find me a doctor"] },
-        ]
-      },
-      nightmares: {
-        label: "Nightmares / Disturbed Sleep",
-        levels: [
-          { level:"basic", icon:"🌱", title:"Basic: Immediate Post-Nightmare Recovery",
-            text:`<p>Waking from a nightmare leaves your body in a <strong>genuine stress response</strong> — heart racing, adrenaline elevated. Here's how to recover quickly.</p><h3>🌙 Right After Waking</h3><ul><li>Ground yourself immediately: say your name, today's date, where you are</li><li>Turn on a low light briefly — visual confirmation that you're safe</li><li>Do 4-7-8 breathing until your heart rate settles</li><li>Touch a physical object (pillow, wall) — texture signals safety to the nervous system</li></ul><h3>📓 Morning Practice</h3><ul><li>Write the nightmare down — it reduces its emotional charge</li><li>Rewrite the ending as something safe or neutral — your brain processes both as real</li></ul><blockquote>A nightmare cannot hurt you. It is your mind processing — not predicting.</blockquote>`,
-            qr:["I have recurring nightmares","I think it's related to trauma","I dread going to sleep","Need more strategies"] },
-          { level:"intermediate", icon:"🌿", title:"Intermediate: Image Rehearsal Therapy (IRT)",
-            text:`<p>Image Rehearsal Therapy is a highly effective, evidence-based technique for reducing recurring nightmares.</p><h3>🔄 How IRT Works</h3><ul><li>During the day (not before bed), recall a recurring nightmare</li><li>Rewrite it with a <em>different, positive or neutral ending</em> in as much detail as possible</li><li>Rehearse the new version mentally — 10–20 minutes daily</li><li>Over 1–2 weeks, the brain begins to replace the old nightmare pattern with the new one</li></ul><h3>💡 Also Helpful</h3><ul><li>Avoid scary/disturbing content (news, movies, games) 2 hours before bed</li><li>Establish a calming pre-sleep ritual — signals safety to the nervous system</li></ul>`,
-            qr:["I think it's PTSD-related","The nightmares are about a specific event","I need professional help","This helped a bit"] },
-          { level:"advanced", icon:"🔥", title:"Advanced: Trauma & Nightmare Connection",
-            text:`<p>Recurring nightmares, especially those replaying specific events, are often a sign that <strong>unprocessed trauma</strong> is being worked through during sleep.</p><h3>🔍 Understanding the Link</h3><ul><li>Trauma activates the amygdala — the brain's threat centre — even during sleep</li><li>The hippocampus struggles to contextualise traumatic memories as "past" — they feel present</li><li>This is not a character weakness; it is how human memory works under threat conditions</li></ul><h3>🌱 What Helps Beyond Self-Help</h3><ul><li><strong>EMDR therapy</strong> — most evidence-backed treatment for trauma nightmares</li><li><strong>Prazosin</strong> — a medication prescribed specifically for PTSD-related nightmares</li><li><strong>Trauma-focused CBT</strong> — processes the underlying memories</li></ul>`,
-            qr:["I have PTSD","I want trauma therapy","I need to see a doctor about medication"] },
-          { level:"pro", icon:"💎", title:"Pro: PTSD & Clinical Sleep Treatment",
-            text:`<p>If nightmares are severe, frequent, and linked to a traumatic experience — this is likely <strong>Post-Traumatic Stress Disorder (PTSD)</strong>, which is a clinical diagnosis with excellent treatments.</p><h3>🏥 Evidence-Based Treatments</h3><ul><li><strong>EMDR</strong> (Eye Movement Desensitisation & Reprocessing) — dramatically reduces nightmare frequency</li><li><strong>Prolonged Exposure (PE) therapy</strong> — processes trauma memories safely</li><li><strong>Cognitive Processing Therapy (CPT)</strong></li><li><strong>Medication:</strong> Prazosin for nightmares; SSRIs for PTSD symptoms broadly</li></ul><p>PTSD is <em>highly treatable</em>. Many people achieve full recovery with proper support. Please reach out to a mental health professional. 💙</p>`,
-            qr:["Find me a trauma therapist","What is EMDR?","I need crisis support","I'm ready to get help"] },
-        ]
-      }
-    },
-    subQR:["Can't fall asleep","Waking up during the night","Always tired / no energy","Nightmares / disturbed sleep"]
-  }
-};
-
 // ── Conversation state ────────────────────────────────────────────────
 let state = {
   topic: null,       // e.g. 'stress'
@@ -743,13 +299,23 @@ function appendBotMsg({html, qr=[], sources=[], showNext=false, nextLabel='', is
   if (sources && sources.length) {
     inner += `<div class="source-chips">` + sources.map(s=>`<span class="source-chip"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 17.93V18a1 1 0 00-2 0v1.93A8.001 8.001 0 014.07 13H6a1 1 0 000-2H4.07A8.001 8.001 0 0111 4.07V6a1 1 0 002 0V4.07A8.001 8.001 0 0119.93 11H18a1 1 0 000 2h1.93A8.001 8.001 0 0113 19.93z"/></svg>${s}</span>`).join('') + `</div>`;
   }
-  inner += `</div>`;
+  // Always add End Chat button
+  inner += `
+    <div class="end-chat-wrap">
+      <button class="end-chat-btn" id="end-chat-btn">🛑 End Chat</button>
+    </div>
+  `;
   row.innerHTML = inner;
   msgContainer.appendChild(row); scrollBottom();
 
   row.querySelectorAll('.qr-chip').forEach(chip => {
     chip.addEventListener('click', () => sendMessage(chip.dataset.msg));
   });
+  // End Chat click
+  const endBtn = row.querySelector('#end-chat-btn');
+  if (endBtn) {
+    endBtn.addEventListener('click', endConversation);
+  }
   const nb = document.getElementById('next-level-btn');
   if (nb) {
     nb.addEventListener('click', () => {
@@ -944,6 +510,29 @@ window.addEventListener('load', () => {
     qr:["I'm stressed","I'm anxious","I'm sad / feeling low","I'm feeling great","I need coping tips","I can't sleep"]
   });
 });
+</script>
+<script>
+  function endConversation() {
+  // Disable input
+  userInput.disabled = true;
+  sendBtn.disabled = true;
+
+  // Remove all interactive buttons
+  document.querySelectorAll('.qr-chip').forEach(el => el.remove());
+  document.querySelectorAll('.next-level-btn').forEach(el => el.remove());
+  document.querySelectorAll('.end-chat-wrap').forEach(el => el.remove());
+
+  // Final closure message
+  showTypingThen(() => appendBotMsg({
+    html: `
+      <h2>🌿 Session Closed</h2>
+      <p>Thank you for taking time to check in with yourself today.</p>
+      <p>If you need support again, just refresh the page.</p>
+      <blockquote>Taking care of your mind is strength.</blockquote>
+    `,
+    qr: []
+  }));
+}
 </script>
 </body>
 </html>

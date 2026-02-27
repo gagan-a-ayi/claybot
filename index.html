@@ -315,10 +315,10 @@ msgContainer.appendChild(row); scrollBottom();
     chip.addEventListener('click', () => sendMessage(chip.dataset.msg));
   });
   // End Chat click
- const endBtn = row.querySelector('.end-chat-btn');
- if (endBtn) {
-   endBtn.addEventListener('click', endConversation);
- }
+  const endBtn = row.querySelector('.end-chat-btn');
+  if (endBtn) {
+    endBtn.addEventListener('click', endConversation);
+  }
   const nb = document.getElementById('next-level-btn');
   if (nb) {
     nb.addEventListener('click', () => {
@@ -338,7 +338,7 @@ async function escalateLevel() {
   const levels = ds.subtypes[state.subtype].levels;
   state.levelIndex++;
 
-  if (state.levelIndex >= levels.length) {
+  /*if (state.levelIndex >= levels.length) {
     // Show consult
     showTypingThen(() => {
       appendBotMsg({
@@ -350,13 +350,29 @@ async function escalateLevel() {
       });
     });
     return;
+  }*/
+
+  // Prevent escalation beyond last defined level
+  if (state.levelIndex >= levels.length - 1) {
+    state.levelIndex = levels.length - 1; // Clamp to final level (Pro)
+    return; // Stop here — do NOT auto-trigger CONSULT
   }
 
   const result = buildLevelResponse(state.topic, state.subtype, state.levelIndex);
   if (!result) return;
 
   showTypingThen(() => {
-    const nextLvl = state.levelIndex + 1 < levels.length ? levels[state.levelIndex+1].level : 'consult';
+    const hasNextLevel = state.levelIndex + 1 < levels.length;
+
+    appendBotMsg({
+      html: result.html,
+      qr: result.qr,
+      sources: result.sources,
+      showNext: hasNextLevel,
+      nextLabel: hasNextLevel 
+          ? `${LEVEL_META[levels[state.levelIndex+1].level].icon} ${LEVEL_META[levels[state.levelIndex+1].level].label}`
+          : '',
+    });
     const nextMeta = LEVEL_META[nextLvl] || LEVEL_META.consult;
     appendBotMsg({
       html: result.html,
